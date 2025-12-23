@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ma Dir Wallo – Entraide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #111827;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.18);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #ef4444;
+      --radius: 10px;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+      --border: rgba(148, 163, 184, 0.18);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;}
+    body {
+      background: radial-gradient(circle at top, #1d283a 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    header {
+      padding: 14px 4vw;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to right, rgba(15,23,42,0.93), rgba(15,23,42,0.85));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 25% 0, #4ade80, #22c55e 45%, #16a34a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #022c22;
+      font-weight: 900;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5), 0 10px 22px rgba(34, 197, 94, 0.55);
+    }
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+    }
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lang-btn {
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--muted);
+      padding: 4px 8px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 160ms ease;
+    }
+    .lang-btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    main {
+      flex: 1;
+      padding: 18px 4vw 30px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.1fr);
+      gap: 18px;
+    }
+    @media (max-width: 960px) {
+      main { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(148,163,184,0.14), transparent 40%), #020617;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 14px 16px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .card-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .pill {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.14);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      color: #a5f3fc;
+    }
+
+    .tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 2px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(148,163,184,0.35);
+      margin-bottom: 10px;
+    }
+    .tab {
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 160ms ease;
+    }
+    .tab.active {
+      background: rgba(15,23,42,0.95);
+      color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.35);
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      margin-top: 7px;
+      margin-bottom: 3px;
+      color: var(--muted);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: #020617;
+      color: var(--text);
+      font-size: 0.8rem;
+      outline: none;
+      transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.45);
+      background: #020617;
+    }
+    textarea { min-height: 60px; resize: vertical; }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    @media (max-width: 640px) {
+      .row { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 10px 25px rgba(34,197,94,0.55);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(34,197,94,0.68); }
+    .btn-outline {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: rgba(15,23,42,0.95); }
+
+    .list {
+      margin-top: 6px;
+      max-height: 310px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .item {
+      border-radius: 10px;
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 8px 9px;
+      margin-bottom: 6px;
+      background: rgba(15,23,42,0.96);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 8px;
+      position: relative;
+    }
+    @media (max-width: 720px) {
+      .item { grid-template-columns: minmax(0, 1fr); }
+    }
+    .item-header {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+    .item-title { font-size: 0.86rem; font-weight: 600; }
+    .item-meta { font-size: 0.72rem; color: var(--muted); }
+    .badge {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+      color: #a5b4fc;
+    }
+    .badge-vol { border-color: rgba(52,211,153,0.7); color: #6ee7b7; }
+    .badge-paid { border-color: rgba(250,204,21,0.7); color: #facc15; }
+    .badge-rating {
+      border-color: rgba(234,179,8,0.7);
+      color: #fbbf24;
+    }
+    .tag {
+      display: inline-block;
+      margin-top: 3px;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.15);
+      color: #5eead4;
+      margin-right: 4px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .small-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.9);
+      color: var(--muted);
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      cursor: pointer;
+    }
+    .small-btn.danger {
+      border-color: rgba(248,113,113,0.7);
+      color: #fecaca;
+    }
+
+    .msg-list {
+      max-height: 220px;
+      overflow-y: auto;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(31,41,55,0.9);
+      padding: 6px;
+      background: rgba(15,23,42,0.9);
+    }
+    .msg-item {
+      margin-bottom: 4px;
+      font-size: 0.76rem;
+      line-height: 1.3;
+    }
+    .msg-meta {
+      color: var(--muted);
+      font-size: 0.7rem;
+    }
+    .msg-body {
+      margin-top: 1px;
+    }
+
+    .rating-stars {
+      display: inline-flex;
+      gap: 2px;
+      cursor: pointer;
+      font-size: 0.86rem;
+    }
+    .star-active { color: #facc15; }
+    .star-muted { color: #4b5563; }
+
+    .alert {
+      font-size: 0.75rem;
+      padding: 4px 7px;
+      border-radius: 8px;
+      margin-top: 6px;
+    }
+    .alert-ok {
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.45);
+      color: #bbf7d0;
+    }
+    .alert-bad {
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.5);
+      color: #fecaca;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .toggle-row input[type="checkbox"] {
+      width: auto;
+    }
+    .footer {
+      padding: 8px 4vw 14px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      border-top: 1px solid var(--border);
+      background: rgba(15,23,42,0.92);
+      backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-logo">MW</div>
+    <div>
+      <div class="brand-title" data-i18n="appName">Ma Dir Wallo</div>
+      <div class="brand-sub" data-i18n="appTagline">Plateforme d’entraide entre citoyens</div>
+    </div>
+  </div>
+  <div class="lang-switch">
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="ar">AR</button>
+  </div>
+</header>
+
+<main id="root">
+  <!-- Colonne gauche : inscription + missions -->
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title" data-i18n="sectionUser">Utilisateurs & profils</div>
+        <div class="card-sub" data-i18n="sectionUserSub">Inscription prestataires & demandeurs, gestion de missions</div>
+      </div>
+      <span class="pill" data-i18n="localCommunity">Communauté locale</span>
+    </div>
+
+    <!-- Tabs: Provider / Requester -->
+    <div class="tabs">
+      <button class="tab active" id="tab-provider" data-i18n="tabProvider">Prestataire</button>
+      <button class="tab" id="tab-requester" data-i18n="tabRequester">Demandeur</button>
+    </div>
+
+    <!-- Form prestataire -->
+    <form id="form-provider">
+      <div class="row">
+        <div>
+          <label data-i18n="labelFirstName">Nom</label>
+          <input id="prov-firstname" required />
+        </div>
+        <div>
+          <label data-i18n="labelLastName">Prénom</label>
+          <input id="prov-lastname" required />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label data-i18n="labelAge">Âge</label>
+          <input id="prov-age" type="number" min="16" />
+        </div>
+        <div>
+          <label data-i18n="labelPhone">Téléphone</label>
+          <input id="prov-phone" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label data-i18n="labelEmail">E-mail</label>
+          <input id="prov-email" type="email" />
+        </div>
+        <div>
+          <label data-i18n="labelLocation">Localisation (ville)</label>
+          <input id="prov-location" />
+        </div>
+      </div>
+      <label data-i18n="labelSkills">Compétences & services</label>
+      <input id="prov-skills" placeholder="ex : bricolage, soutien scolaire, aide personnes âgées" />
+
+      <label data-i18n="labelAvailability">Disponibilités (jours / heures)</label>
+      <input id="prov-availability" />
+
+      <div class="row">
+        <div>
+          <label data-i18n="labelServiceType">Type de service</label>
+          <select id="prov-service-type">
+            <option value="volunteer" data-i18n="optVolunteer">Bénévole</option>
+            <option value="paid" data-i18n="optPaid">Rémunéré</option>
+          </select>
+        </div>
+        <div>
+          <label data-i18n="labelHourlyRate">Tarif horaire (si rémunéré)</label>
+          <input id="prov-rate" type="number" min="0" step="1" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label data-i18n="labelIdCheck">Vérification identité</label>
+          <select id="prov-verified">
+            <option value="none" data-i18n="optNotVerified">Non vérifié</option>
+            <option value="phone" data-i18n="optPhoneVerified">Téléphone vérifié</option>
+            <option value="id" data-i18n="optIdVerified">Pièce d’identité vérifiée</option>
+          </select>
+        </div>
+        <div>
+          <label data-i18n="labelProfilePhoto">Photo de profil (URL)</label>
+          <input id="prov-photo" placeholder="https://..." />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <span data-i18n="btnSaveProvider">Enregistrer prestataire</span>
+      </button>
+      <span id="prov-feedback" class="alert alert-ok" style="display:none"></span>
+    </form>
+
+    <!-- Form demandeur -->
+    <form id="form-requester" style="display:none">
+      <div class="row">
+        <div>
+          <label data-i18n="labelFirstName">Nom</label>
+          <input id="req-firstname" required />
+        </div>
+        <div>
+          <label data-i18n="labelLastName">Prénom</label>
+          <input id="req-lastname" required />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label data-i18n="labelPhone">Téléphone</label>
+          <input id="req-phone" />
+        </div>
+        <div>
+          <label data-i18n="labelEmail">E-mail</label>
+          <input id="req-email" type="email" />
+        </div>
+      </div>
+      <label data-i18n="labelNeeds">Besoins spécifiques</label>
+      <input id="req-needs" placeholder="ex : déménagement, soutien scolaire, aide administrative" />
+
+      <label data-i18n="labelBudget">Budget estimé (si rémunéré)</label>
+      <input id="req-budget" type="number" min="0" step="1" />
+
+      <button type="submit" class="btn btn-primary">
+        <span data-i18n="btnSaveRequester">Enregistrer demandeur</span>
+      </button>
+      <span id="req-feedback" class="alert alert-ok" style="display:none"></span>
+    </form>
+
+    <hr style="border-color: rgba(31,41,55,0.9); margin: 10px 0 6px" />
+
+    <!-- Missions -->
+    <div class="card-header" style="margin-top:2px;">
+      <div>
+        <div class="card-title" data-i18n="sectionMissions">Missions</div>
+        <div class="card-sub" data-i18n="sectionMissionsSub">Création, validation et suivi des missions</div>
+      </div>
+      <span class="pill" data-i18n="secureCommitment">Engagement sécurisé</span>
+    </div>
+
+    <form id="form-mission">
+      <div class="row">
+        <div>
+          <label data-i18n="labelMissionTitle">Titre de la mission</label>
+          <input id="mission-title" required />
+        </div>
+        <div>
+          <label data-i18n="labelMissionRequester">Demandeur (nom)</label>
+          <input id="mission-requester" />
+        </div>
+      </div>
+      <label data-i18n="labelMissionDesc">Description</label>
+      <textarea id="mission-desc"></textarea>
+
+      <div class="row">
+        <div>
+          <label data-i18n="labelMissionDuration">Durée / créneau</label>
+          <input id="mission-duration" />
+        </div>
+        <div>
+          <label data-i18n="labelMissionLocation">Lieu</label>
+          <input id="mission-location" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label data-i18n="labelMissionBudget">Budget / tarif</label>
+          <input id="mission-budget" type="number" min="0" />
+        </div>
+        <div>
+          <label data-i18n="labelMissionProvider">Prestataire (nom)</label>
+          <input id="mission-provider" />
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <input type="checkbox" id="mission-confirm-both" />
+        <label for="mission-confirm-both" data-i18n="labelMissionConfirm">Mission confirmée par les deux parties</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <span data-i18n="btnSaveMission">Enregistrer mission</span>
+      </button>
+      <span id="mission-feedback" class="alert alert-ok" style="display:none"></span>
+    </form>
+
+    <div class="list" id="missions-list"></div>
+  </section>
+
+  <!-- Colonne droite : recherche, messagerie, avis, paiement, convention -->
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title" data-i18n="sectionSearch">Recherche & mise en relation</div>
+        <div class="card-sub" data-i18n="sectionSearchSub">Filtres, géolocalisation simple, messagerie locale</div>
+      </div>
+      <span class="pill" data-i18n="trustSafety">Confiance & sécurité</span>
+    </div>
+
+    <!-- Filtres de recherche (simples) -->
+    <div class="row">
+      <div>
+        <label data-i18n="labelFilterServiceType">Type de service</label>
+        <select id="filter-service-type">
+          <option value="" data-i18n="optAll">Tous</option>
+          <option value="volunteer" data-i18n="optVolunteer">Bénévole</option>
+          <option value="paid" data-i18n="optPaid">Rémunéré</option>
+        </select>
+      </div>
+      <div>
+        <label data-i18n="labelFilterLocation">Ville</label>
+        <input id="filter-location" placeholder="ex : Alger, Oran, Tlemcen" />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label data-i18n="labelFilterAvailability">Disponibilité contient</label>
+        <input id="filter-availability" placeholder="ex : week-end, soir" />
+      </div>
+      <div>
+        <label data-i18n="labelFilterRating">Note minimale</label>
+        <select id="filter-rating">
+          <option value="0">0+</option>
+          <option value="3">1+</option>
+          <option value="3">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="3">5+</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-outline" id="btn-apply-filter">
+      <span data-i18n="btnApplyFilter">Appliquer filtres</span>
+    </button>
+
+    <div class="list" id="providers-list"></div>
+
+    <hr style="border-color: rgba(31,41,55,0.9); margin: 8px 0 6px" />
+
+    <!-- Messagerie -->
+    <div class="card-header">
+      <div>
+        <div class="card-title" data-i18n="sectionMessaging">Messagerie</div>
+        <div class="card-sub" data-i18n="sectionMessagingSub">Chat local simple entre prestataires et demandeurs</div>
+      </div>
+      <span class="pill" data-i18n="secureChat">Chat sécurisé (local)</span>
+    </div>
+
+    <div>
+      <label data-i18n="labelChatBetween">Entre (nom 1 – nom 2)</label>
+      <input id="chat-participants" placeholder="ex : Fodil - Amine" />
+      <label data-i18n="labelChatMessage">Message</label>
+      <textarea id="chat-message"></textarea>
+      <button class="btn btn-primary" id="btn-send-msg">
+        <span data-i18n="btnSendMsg">Envoyer</span>
+      </button>
+      <div class="msg-list" id="messages-list"></div>
+    </div>
+
+    <hr style="border-color: rgba(31,41,55,0.9); margin: 8px 0 6px" />
+
+    <!-- Notation & avis -->
+    <div class="card-header">
+      <div>
+        <div class="card-title" data-i18n="sectionRating">Notation & avis</div>
+        <div class="card-sub" data-i18n="sectionRatingSub">Évaluation mutuelle après mission, signalement des abus</div>
+      </div>
+      <span class="pill" data-i18n="reputation">Réputation</span>
+    </div>
+
+    <div class="row">
+      <div>
+        <label data-i18n="labelRatingProvider">Prestataire (nom)</label>
+        <input id="rating-provider" />
+      </div>
+      <div>
+        <label data-i18n="labelRatingRequester">Demandeur (nom)</label>
+        <input id="rating-requester" />
+      </div>
+    </div>
+    <label data-i18n="labelRatingFor">Note pour</label>
+    <select id="rating-target">
+      <option value="provider" data-i18n="optRateProvider">Prestataire</option>
+      <option value="requester" data-i18n="optRateRequester">Demandeur</option>
+    </select>
+
+    <div style="margin-top:5px;">
+      <span data-i18n="labelRatingScore">Note (1–5)</span> :
+      <span class="rating-stars" id="rating-stars">
+        <span data-value="1" class="star-muted">★</span>
+        <span data-value="2" class="star-muted">★</span>
+        <span data-value="3" class="star-muted">★</span>
+        <span data-value="4" class="star-muted">★</span>
+        <span data-value="5" class="star-muted">★</span>
+      </span>
+    </div>
+
+    <label style="margin-top:6px;" data-i18n="labelRatingComment">Commentaire</label>
+    <textarea id="rating-comment"></textarea>
+    <button class="btn btn-primary" id="btn-save-rating">
+      <span data-i18n="btnSaveRating">Enregistrer avis</span>
+    </button>
+    <button class="btn btn-outline" id="btn-report-abuse" style="margin-left:4px;">
+      <span data-i18n="btnReportAbuse">Signaler un abus</span>
+    </button>
+    <div id="rating-feedback" class="alert alert-ok" style="display:none"></div>
+
+    <div class="list" id="ratings-list" style="max-height:150px;"></div>
+
+    <hr style="border-color: rgba(31,41,55,0.9); margin: 8px 0 6px" />
+
+    <!-- Paiement + Convention -->
+    <div class="card-header">
+      <div>
+        <div class="card-title" data-i18n="sectionPayment">Paiement & convention</div>
+        <div class="card-sub" data-i18n="sectionPaymentSub">Simulation de paiement sécurisé & convention PDF-texte</div>
+      </div>
+      <span class="pill" data-i18n="simulationMode">Mode démo local</span>
+    </div>
+
+    <div>
+      <label data-i18n="labelPayMissionId">ID mission</label>
+      <input id="pay-mission-id" placeholder="ID listé dans les missions" />
+      <label data-i18n="labelPayAmount">Montant (simulation)</label>
+      <input id="pay-amount" type="number" min="0" />
+      <button class="btn btn-primary" id="btn-pay">
+        <span data-i18n="btnPay">Simuler paiement</span>
+      </button>
+      <div id="pay-feedback" class="alert" style="display:none"></div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button class="btn btn-outline" id="btn-generate-contract">
+        <span data-i18n="btnGenerateContract">Générer convention type</span>
+      </button>
+      <textarea id="contract-text" style="margin-top:6px; min-height:90px;" placeholder="Convention générée ici..."></textarea>
+    </div>
+  </section>
+</main>
+
+<div class="footer">
+  <span data-i18n="footerText">
+    Prototype local « Ma Dir Wallo » – multi-langue (FR/EN/AR), stockage localStorage, sans backend.
+  </span>
+</div>
+
+<script>
+  // -----------------------------
+  // Traductions (FR, EN, AR)
+  // -----------------------------
+  const i18nDict = {
+    fr: {
+      appName: "Ma Dir Wallo",
+      appTagline: "Plateforme d’entraide entre citoyens",
+      localCommunity: "Communauté locale",
+      sectionUser: "Utilisateurs & profils",
+      sectionUserSub: "Inscription prestataires & demandeurs, gestion de missions",
+      tabProvider: "Prestataire",
+      tabRequester: "Demandeur",
+      labelFirstName: "Nom",
+      labelLastName: "Prénom",
+      labelAge: "Âge",
+      labelPhone: "Téléphone",
+      labelEmail: "E-mail",
+      labelLocation: "Localisation (ville)",
+      labelSkills: "Compétences & services",
+      labelAvailability: "Disponibilités (jours / heures)",
+      labelServiceType: "Type de service",
+      optVolunteer: "Bénévole",
+      optPaid: "Rémunéré",
+      labelHourlyRate: "Tarif horaire (si rémunéré)",
+      labelIdCheck: "Vérification identité",
+      optNotVerified: "Non vérifié",
+      optPhoneVerified: "Téléphone vérifié",
+      optIdVerified: "Pièce d’identité vérifiée",
+      labelProfilePhoto: "Photo de profil (URL)",
+      btnSaveProvider: "Enregistrer prestataire",
+      btnSaveRequester: "Enregistrer demandeur",
+      labelNeeds: "Besoins spécifiques",
+      labelBudget: "Budget estimé (si rémunéré)",
+      sectionMissions: "Missions",
+      sectionMissionsSub: "Création, validation et suivi des missions",
+      secureCommitment: "Engagement sécurisé",
+      labelMissionTitle: "Titre de la mission",
+      labelMissionRequester: "Demandeur (nom)",
+      labelMissionDesc: "Description",
+      labelMissionDuration: "Durée / créneau",
+      labelMissionLocation: "Lieu",
+      labelMissionBudget: "Budget / tarif",
+      labelMissionProvider: "Prestataire (nom)",
+      labelMissionConfirm: "Mission confirmée par les deux parties",
+      btnSaveMission: "Enregistrer mission",
+      sectionSearch: "Recherche & mise en relation",
+      sectionSearchSub: "Filtres, géolocalisation simple, messagerie locale",
+      trustSafety: "Confiance & sécurité",
+      labelFilterServiceType: "Type de service",
+      labelFilterLocation: "Ville",
+      labelFilterAvailability: "Disponibilité contient",
+      labelFilterRating: "Note minimale",
+      optAll: "Tous",
+      btnApplyFilter: "Appliquer filtres",
+      sectionMessaging: "Messagerie",
+      sectionMessagingSub: "Chat local simple entre prestataires et demandeurs",
+      secureChat: "Chat sécurisé (local)",
+      labelChatBetween: "Entre (nom 1 – nom 2)",
+      labelChatMessage: "Message",
+      btnSendMsg: "Envoyer",
+      sectionRating: "Notation & avis",
+      sectionRatingSub: "Évaluation mutuelle après mission, signalement des abus",
+      reputation: "Réputation",
+      labelRatingProvider: "Prestataire (nom)",
+      labelRatingRequester: "Demandeur (nom)",
+      labelRatingFor: "Note pour",
+      optRateProvider: "Prestataire",
+      optRateRequester: "Demandeur",
+      labelRatingScore: "Note (1–5)",
+      labelRatingComment: "Commentaire",
+      btnSaveRating: "Enregistrer avis",
+      btnReportAbuse: "Signaler un abus",
+      sectionPayment: "Paiement & convention",
+      sectionPaymentSub: "Simulation de paiement sécurisé & convention PDF-texte",
+      simulationMode: "Mode démo local",
+      labelPayMissionId: "ID mission",
+      labelPayAmount: "Montant (simulation)",
+      btnPay: "Simuler paiement",
+      btnGenerateContract: "Générer convention type",
+      footerText: "Prototype local « Ma Dir Wallo » – multi-langue (FR/EN/AR), stockage localStorage, sans backend."
+    },
+    en: {
+      appName: "Ma Dir Wallo",
+      appTagline: "Mutual help platform between citizens",
+      localCommunity: "Local community",
+      sectionUser: "Users & profiles",
+      sectionUserSub: "Provider & requester registration, mission management",
+      tabProvider: "Provider",
+      tabRequester: "Requester",
+      labelFirstName: "Last name",
+      labelLastName: "First name",
+      labelAge: "Age",
+      labelPhone: "Phone",
+      labelEmail: "E-mail",
+      labelLocation: "Location (city)",
+      labelSkills: "Skills & services",
+      labelAvailability: "Availability (days / hours)",
+      labelServiceType: "Service type",
+      optVolunteer: "Volunteer",
+      optPaid: "Paid",
+      labelHourlyRate: "Hourly rate (if paid)",
+      labelIdCheck: "Identity verification",
+      optNotVerified: "Not verified",
+      optPhoneVerified: "Phone verified",
+      optIdVerified: "ID document verified",
+      labelProfilePhoto: "Profile photo (URL)",
+      btnSaveProvider: "Save provider",
+      btnSaveRequester: "Save requester",
+      labelNeeds: "Specific needs",
+      labelBudget: "Estimated budget (if paid)",
+      sectionMissions: "Missions",
+      sectionMissionsSub: "Creation, validation and tracking of missions",
+      secureCommitment: "Secure commitment",
+      labelMissionTitle: "Mission title",
+      labelMissionRequester: "Requester (name)",
+      labelMissionDesc: "Description",
+      labelMissionDuration: "Duration / slot",
+      labelMissionLocation: "Location",
+      labelMissionBudget: "Budget / rate",
+      labelMissionProvider: "Provider (name)",
+      labelMissionConfirm: "Mission confirmed by both parties",
+      btnSaveMission: "Save mission",
+      sectionSearch: "Search & matching",
+      sectionSearchSub: "Filters, simple geolocation, local messaging",
+      trustSafety: "Trust & safety",
+      labelFilterServiceType: "Service type",
+      labelFilterLocation: "City",
+      labelFilterAvailability: "Availability contains",
+      labelFilterRating: "Min rating",
+      optAll: "All",
+      btnApplyFilter: "Apply filters",
+      sectionMessaging: "Messaging",
+      sectionMessagingSub: "Simple local chat between providers and requesters",
+      secureChat: "Secure chat (local)",
+      labelChatBetween: "Between (name 1 – name 2)",
+      labelChatMessage: "Message",
+      btnSendMsg: "Send",
+      sectionRating: "Rating & reviews",
+      sectionRatingSub: "Mutual evaluation after mission, abuse reporting",
+      reputation: "Reputation",
+      labelRatingProvider: "Provider (name)",
+      labelRatingRequester: "Requester (name)",
+      labelRatingFor: "Rate",
+      optRateProvider: "Provider",
+      optRateRequester: "Requester",
+      labelRatingScore: "Score (1–5)",
+      labelRatingComment: "Comment",
+      btnSaveRating: "Save review",
+      btnReportAbuse: "Report abuse",
+      sectionPayment: "Payment & contract",
+      sectionPaymentSub: "Secure payment simulation & text contract",
+      simulationMode: "Local demo mode",
+      labelPayMissionId: "Mission ID",
+      labelPayAmount: "Amount (simulation)",
+      btnPay: "Simulate payment",
+      btnGenerateContract: "Generate contract template",
+      footerText: "Local prototype \"Ma Dir Wallo\" – multilingual (FR/EN/AR), localStorage only, no backend."
+    },
+    ar: {
+      appName: "ما تدير والو",
+      appTagline: "منصة للتضامن والتعاون بين الأفراد",
+      localCommunity: "مجتمع محلي",
+      sectionUser: "المستخدمون والملفات",
+      sectionUserSub: "تسجيل مقدمي الخدمات وطالبيها وإدارة المهام",
+      tabProvider: "مقدّم خدمة",
+      tabRequester: "طالب خدمة",
+      labelFirstName: "اللقب",
+      labelLastName: "الاسم",
+      labelAge: "العمر",
+      labelPhone: "الهاتف",
+      labelEmail: "البريد الإلكتروني",
+      labelLocation: "المدينة / الموقع",
+      labelSkills: "المهارات والخدمات",
+      labelAvailability: "أوقات التوفر",
+      labelServiceType: "نوع الخدمة",
+      optVolunteer: "تطوعي",
+      optPaid: "مدفوع",
+      labelHourlyRate: "الأجر بالساعة (إن وجد)",
+      labelIdCheck: "تحقق من الهوية",
+      optNotVerified: "غير مُتحقق",
+      optPhoneVerified: "هاتف مُتحقق",
+      optIdVerified: "وثيقة هوية مُتحققة",
+      labelProfilePhoto: "رابط صورة الملف الشخصي",
+      btnSaveProvider: "حفظ مقدّم الخدمة",
+      btnSaveRequester: "حفظ طالب الخدمة",
+      labelNeeds: "الاحتياجات الخاصة",
+      labelBudget: "الميزانية التقديرية (إن كانت مدفوعة)",
+      sectionMissions: "المهام",
+      sectionMissionsSub: "إنشاء المهام وتأكيدها ومتابعتها",
+      secureCommitment: "التزام آمن",
+      labelMissionTitle: "عنوان المهمة",
+      labelMissionRequester: "طالب الخدمة (الاسم)",
+      labelMissionDesc: "الوصف",
+      labelMissionDuration: "المدة / التوقيت",
+      labelMissionLocation: "المكان",
+      labelMissionBudget: "الميزانية / الأجر",
+      labelMissionProvider: "مقدّم الخدمة (الاسم)",
+      labelMissionConfirm: "مهمة مؤكدة من الطرفين",
+      btnSaveMission: "حفظ المهمة",
+      sectionSearch: "البحث والربط",
+      sectionSearchSub: "فلاتر بسيطة، موقع تقريبي، ومراسلة محلية",
+      trustSafety: "الثقة والأمان",
+      labelFilterServiceType: "نوع الخدمة",
+      labelFilterLocation: "المدينة",
+      labelFilterAvailability: "التوفر يحتوي على",
+      labelFilterRating: "أدنى تقييم",
+      optAll: "الكل",
+      btnApplyFilter: "تطبيق الفلاتر",
+      sectionMessaging: "المراسلة",
+      sectionMessagingSub: "دردشة بسيطة بين مقدّم وطالب الخدمة",
+      secureChat: "دردشة آمنة (محلية)",
+      labelChatBetween: "بين (اسم 1 – اسم 2)",
+      labelChatMessage: "الرسالة",
+      btnSendMsg: "إرسال",
+      sectionRating: "التقييمات والمراجعات",
+      sectionRatingSub: "تقييم متبادل بعد المهمة والإبلاغ عن التجاوزات",
+      reputation: "السمعة",
+      labelRatingProvider: "مقدّم الخدمة (الاسم)",
+      labelRatingRequester: "طالب الخدمة (الاسم)",
+      labelRatingFor: "تقييم",
+      optRateProvider: "مقدّم الخدمة",
+      optRateRequester: "طالب الخدمة",
+      labelRatingScore: "الدرجة (1–5)",
+      labelRatingComment: "تعليق",
+      btnSaveRating: "حفظ المراجعة",
+      btnReportAbuse: "الإبلاغ عن إساءة",
+      sectionPayment: "الدفع والعقد",
+      sectionPaymentSub: "محاكاة دفع آمن وعقد نصّي",
+      simulationMode: "وضع تجربة محلي",
+      labelPayMissionId: "معرّف المهمة",
+      labelPayAmount: "المبلغ (محاكاة)",
+      btnPay: "محاكاة الدفع",
+      btnGenerateContract: "إنشاء عقد نموذجي",
+      footerText: "نموذج محلي «ما تدير والو» – متعدد اللغات (فر/إنج/عر) مع حفظ محلي فقط."
+    }
+  };
+
+  let currentLang = localStorage.getItem("mdw_lang") || "fr";
+
+  function applyTranslations() {
+    const dict = i18nDict[currentLang] || i18nDict.fr;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key]) el.textContent = dict[key];
+    });
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+  }
+
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem("mdw_lang", currentLang);
+      applyTranslations();
+    });
+  });
+
+  // -----------------------------
+  // Stockage local
+  // -----------------------------
+  const STORAGE_KEYS = {
+    providers: "mdw_providers",
+    requesters: "mdw_requesters",
+    missions: "mdw_missions",
+    messages: "mdw_messages",
+    ratings: "mdw_ratings",
+    abuses: "mdw_abuses",
+    payments: "mdw_payments"
+  };
+
+  function loadArray(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+  function saveArray(key, arr) {
+    localStorage.setItem(key, JSON.stringify(arr));
+  }
+
+  let providers = loadArray(STORAGE_KEYS.providers);
+  let requesters = loadArray(STORAGE_KEYS.requesters);
+  let missions = loadArray(STORAGE_KEYS.missions);
+  let messages = loadArray(STORAGE_KEYS.messages);
+  let ratings = loadArray(STORAGE_KEYS.ratings);
+  let abuses = loadArray(STORAGE_KEYS.abuses);
+  let payments = loadArray(STORAGE_KEYS.payments);
+
+  // -----------------------------
+  // Tabs prestataire / demandeur
+  // -----------------------------
+  const tabProv = document.getElementById("tab-provider");
+  const tabReq = document.getElementById("tab-requester");
+  const formProv = document.getElementById("form-provider");
+  const formReq = document.getElementById("form-requester");
+
+  tabProv.addEventListener("click", () => {
+    tabProv.classList.add("active");
+    tabReq.classList.remove("active");
+    formProv.style.display = "";
+    formReq.style.display = "none";
+  });
+  tabReq.addEventListener("click", () => {
+    tabReq.classList.add("active");
+    tabProv.classList.remove("active");
+    formReq.style.display = "";
+    formProv.style.display = "none";
+  });
+
+  // -----------------------------
+  // Enregistrement prestataire
+  // -----------------------------
+  formProv.addEventListener("submit", e => {
+    e.preventDefault();
+    const prov = {
+      id: Date.now(),
+      firstname: document.getElementById("prov-firstname").value.trim(),
+      lastname: document.getElementById("prov-lastname").value.trim(),
+      age: document.getElementById("prov-age").value,
+      phone: document.getElementById("prov-phone").value.trim(),
+      email: document.getElementById("prov-email").value.trim(),
+      location: document.getElementById("prov-location").value.trim(),
+      skills: document.getElementById("prov-skills").value.trim(),
+      availability: document.getElementById("prov-availability").value.trim(),
+      serviceType: document.getElementById("prov-service-type").value,
+      rate: parseFloat(document.getElementById("prov-rate").value || "0"),
+      verified: document.getElementById("prov-verified").value,
+      photo: document.getElementById("prov-photo").value.trim(),
+      ratingAvg: 0,
+      ratingCount: 0
+    };
+    providers.push(prov);
+    saveArray(STORAGE_KEYS.providers, providers);
+    renderProviders();
+    const fb = document.getElementById("prov-feedback");
+    fb.style.display = "inline-block";
+    fb.textContent = currentLang === "ar"
+      ? "تم حفظ مقدّم الخدمة."
+      : currentLang === "en"
+      ? "Provider saved."
+      : "Prestataire enregistré.";
+    setTimeout(() => fb.style.display = "none", 2000);
+    formProv.reset();
+  });
+
+  // -----------------------------
+  // Enregistrement demandeur
+  // -----------------------------
+  formReq.addEventListener("submit", e => {
+    e.preventDefault();
+    const req = {
+      id: Date.now(),
+      firstname: document.getElementById("req-firstname").value.trim(),
+      lastname: document.getElementById("req-lastname").value.trim(),
+      phone: document.getElementById("req-phone").value.trim(),
+      email: document.getElementById("req-email").value.trim(),
+      needs: document.getElementById("req-needs").value.trim(),
+      budget: parseFloat(document.getElementById("req-budget").value || "0")
+    };
+    requesters.push(req);
+    saveArray(STORAGE_KEYS.requesters, requesters);
+    const fb = document.getElementById("req-feedback");
+    fb.style.display = "inline-block";
+    fb.textContent = currentLang === "ar"
+      ? "تم حفظ طالب الخدمة."
+      : currentLang === "en"
+      ? "Requester saved."
+      : "Demandeur enregistré.";
+    setTimeout(() => fb.style.display = "none", 2000);
+    formReq.reset();
+  });
+
+  // -----------------------------
+  // Missions
+  // -----------------------------
+  const formMission = document.getElementById("form-mission");
+  const missionsList = document.getElementById("missions-list");
+
+  formMission.addEventListener("submit", e => {
+    e.preventDefault();
+    const mission = {
+      id: Date.now(),
+      title: document.getElementById("mission-title").value.trim(),
+      requester: document.getElementById("mission-requester").value.trim(),
+      desc: document.getElementById("mission-desc").value.trim(),
+      duration: document.getElementById("mission-duration").value.trim(),
+      location: document.getElementById("mission-location").value.trim(),
+      budget: parseFloat(document.getElementById("mission-budget").value || "0"),
+      provider: document.getElementById("mission-provider").value.trim(),
+      confirmed: document.getElementById("mission-confirm-both").checked
+    };
+    missions.push(mission);
+    saveArray(STORAGE_KEYS.missions, missions);
+    renderMissions();
+    const fb = document.getElementById("mission-feedback");
+    fb.style.display = "inline-block";
+    fb.textContent = currentLang === "ar"
+      ? "تم حفظ المهمة."
+      : currentLang === "en"
+      ? "Mission saved."
+      : "Mission enregistrée.";
+    setTimeout(() => fb.style.display = "none", 2000);
+    formMission.reset();
+  });
+
+  function renderMissions() {
+    missionsList.innerHTML = "";
+    missions.slice().sort((a,b) => b.id - a.id).forEach(m => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <div>
+          <div class="item-header">
+            <div class="item-title">#${m.id} – ${m.title || "-"}</div>
+          </div>
+          <div class="item-meta">
+            ${m.requester || "?"} → ${m.provider || "?"} • ${m.location || "-"}
+          </div>
+          <div class="item-meta">
+            ${m.duration || ""} ${m.budget ? "• " + m.budget + " DA" : ""}
+          </div>
+        </div>
+        <div>
+          <div class="item-meta">
+            ${m.desc || ""}
+          </div>
+          <div class="actions">
+            <span class="badge ${m.confirmed ? "badge-vol" : ""}">
+              ${m.confirmed ? (currentLang === "ar" ? "مؤكدة" : currentLang === "en" ? "Confirmed" : "Confirmée") : (currentLang === "ar" ? "غير مؤكدة" : currentLang === "en" ? "Not confirmed" : "Non confirmée")}
+            </span>
+          </div>
+        </div>`;
+      missionsList.appendChild(div);
+    });
+  }
+
+  // -----------------------------
+  // Affichage prestataires + filtres
+  // -----------------------------
+  const provList = document.getElementById("providers-list");
+  const filterServiceType = document.getElementById("filter-service-type");
+  const filterLocation = document.getElementById("filter-location");
+  const filterAvailability = document.getElementById("filter-availability");
+  const filterRating = document.getElementById("filter-rating");
+
+  function renderProviders() {
+    provList.innerHTML = "";
+    let filtered = providers.slice();
+    const st = filterServiceType.value;
+    const loc = filterLocation.value.trim().toLowerCase();
+    const avail = filterAvailability.value.trim().toLowerCase();
+    const minR = parseFloat(filterRating.value || "0");
+
+    filtered = filtered.filter(p => {
+      if (st && p.serviceType !== st) return false;
+      if (loc && !(p.location || "").toLowerCase().includes(loc)) return false;
+      if (avail && !(p.availability || "").toLowerCase().includes(avail)) return false;
+      if ((p.ratingAvg || 0) < minR) return false;
+      return true;
+    });
+
+    filtered.sort((a,b)=> (b.ratingAvg||0)-(a.ratingAvg||0));
+
+    filtered.forEach(p => {
+      const fullName = (p.firstname || "") + " " + (p.lastname || "");
+      const div = document.createElement("div");
+      div.className = "item";
+      const serviceTypeLabel = p.serviceType === "volunteer"
+        ? (currentLang === "ar" ? "تطوعي" : currentLang === "en" ? "Volunteer" : "Bénévole")
+        : (currentLang === "ar" ? "مدفوع" : currentLang === "en" ? "Paid" : "Rémunéré");
+      div.innerHTML = `
+        <div>
+          <div class="item-header">
+            <div class="item-title">${fullName || "-"}</div>
+            <span class="badge ${p.serviceType === "volunteer" ? "badge-vol" : "badge-paid"}">
+              ${serviceTypeLabel}
+            </span>
+            <span class="badge badge-rating">
+              ★ ${(p.ratingAvg || 0).toFixed(1)} (${p.ratingCount || 0})
+            </span>
+          </div>
+          <div class="item-meta">
+            ${p.location || "-"} • ${p.availability || ""}
+          </div>
+          <div class="item-meta">
+            ${p.skills || ""}
+          </div>
+          <div class="item-meta">
+            ${p.rate ? (currentLang === "ar" ? p.rate + " دج /ساعة" : p.rate + " DA/h") : ""}
+          </div>
+        </div>
+        <div>
+          <div class="item-meta">
+            ${p.email || ""} ${p.phone ? "• " + p.phone : ""}
+          </div>
+          <div class="item-meta">
+            ${(p.verified === "id")
+              ? (currentLang === "ar" ? "هوية موثقة" : currentLang === "en" ? "ID verified" : "Identité vérifiée")
+              : (p.verified === "phone"
+                ? (currentLang === "ar" ? "هاتف موثق" : currentLang === "en" ? "Phone verified" : "Téléphone vérifié")
+                : (currentLang === "ar" ? "غير متحقق" : currentLang === "en" ? "Not verified" : "Non vérifié"))}
+          </div>
+          <div class="actions">
+            <button class="small-btn" data-action="chat" data-name="${fullName}">
+              💬 ${currentLang === "ar" ? "مراسلة" : currentLang === "en" ? "Chat" : "Contacter"}
+            </button>
+            <button class="small-btn" data-action="mission" data-name="${fullName}">
+              ✅ ${currentLang === "ar" ? "ربط بمهمة" : currentLang === "en" ? "Link mission" : "Lier à une mission"}
+            </button>
+          </div>
+        </div>`;
+      provList.appendChild(div);
+    });
+  }
+
+  document.getElementById("btn-apply-filter").addEventListener("click", renderProviders);
+
+  provList.addEventListener("click", e => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    const name = btn.dataset.name || "";
+    if (btn.dataset.action === "chat") {
+      const chatInput = document.getElementById("chat-participants");
+      if (chatInput.value && !chatInput.value.includes(name)) {
+        chatInput.value += " - " + name;
+      } else if (!chatInput.value) {
+        chatInput.value = name + " - ";
+      }
+      document.getElementById("chat-message").focus();
+    } else if (btn.dataset.action === "mission") {
+      const missionProv = document.getElementById("mission-provider");
+      missionProv.value = name;
+    }
+  });
+
+  // -----------------------------
+  // Messagerie locale
+  // -----------------------------
+  const btnSendMsg = document.getElementById("btn-send-msg");
+  const msgList = document.getElementById("messages-list");
+
+  function renderMessages() {
+    msgList.innerHTML = "";
+    messages.slice().sort((a,b)=>b.id-a.id).forEach(m => {
+      const div = document.createElement("div");
+      div.className = "msg-item";
+      div.innerHTML = `
+        <div class="msg-meta">${m.participants || ""} • ${new Date(m.id).toLocaleString()}</div>
+        <div class="msg-body">${m.text}</div>`;
+      msgList.appendChild(div);
+    });
+  }
+
+  btnSendMsg.addEventListener("click", () => {
+    const participants = document.getElementById("chat-participants").value.trim();
+    const text = document.getElementById("chat-message").value.trim();
+    if (!text) return;
+    messages.push({ id: Date.now(), participants, text });
+    saveArray(STORAGE_KEYS.messages, messages);
+    renderMessages();
+    document.getElementById("chat-message").value = "";
+  });
+
+  // -----------------------------
+  // Notation & avis
+  // -----------------------------
+  let selectedRating = 0;
+  const starsEl = document.getElementById("rating-stars");
+  starsEl.addEventListener("click", e => {
+    const span = e.target.closest("span[data-value]");
+    if (!span) return;
+    selectedRating = parseInt(span.dataset.value, 10);
+    starsEl.querySelectorAll("span[data-value]").forEach(s => {
+      const val = parseInt(s.dataset.value, 10);
+      s.className = val <= selectedRating ? "star-active" : "star-muted";
+    });
+  });
+
+  const ratingList = document.getElementById("ratings-list");
+  function recomputeProviderRatings() {
+    providers.forEach(p => { p.ratingAvg = 0; p.ratingCount = 0; });
+    ratings.forEach(r => {
+      if (r.target === "provider") {
+        const p = providers.find(x => (x.firstname + " " + x.lastname).trim() === r.providerName);
+        if (p) {
+          p.ratingCount = (p.ratingCount || 0) + 1;
+          p.ratingAvg = ((p.ratingAvg || 0) * (p.ratingCount - 1) + r.score) / p.ratingCount;
+        }
+      }
+    });
+    saveArray(STORAGE_KEYS.providers, providers);
+  }
+
+  function renderRatings() {
+    ratingList.innerHTML = "";
+    ratings.slice().sort((a,b)=>b.id-a.id).forEach(r => {
+      const div = document.createElement("div");
+      div.className = "msg-item";
+      const targetLabel = r.target === "provider"
+        ? (currentLang === "ar" ? "مقدّم الخدمة" : currentLang === "en" ? "Provider" : "Prestataire")
+        : (currentLang === "ar" ? "طالب الخدمة" : currentLang === "en" ? "Requester" : "Demandeur");
+      div.innerHTML = `
+        <div class="msg-meta">
+          ${targetLabel} : ${r.target === "provider" ? r.providerName : r.requesterName} • ★${r.score}
+        </div>
+        <div class="msg-body">${r.comment}</div>`;
+      ratingList.appendChild(div);
+    });
+  }
+
+  document.getElementById("btn-save-rating").addEventListener("click", () => {
+    const providerName = document.getElementById("rating-provider").value.trim();
+    const requesterName = document.getElementById("rating-requester").value.trim();
+    const target = document.getElementById("rating-target").value;
+    const comment = document.getElementById("rating-comment").value.trim();
+    if (!selectedRating) return;
+    ratings.push({
+      id: Date.now(),
+      providerName,
+      requesterName,
+      target,
+      score: selectedRating,
+      comment
+    });
+    saveArray(STORAGE_KEYS.ratings, ratings);
+    recomputeProviderRatings();
+    renderRatings();
+    renderProviders();
+    selectedRating = 0;
+    starsEl.querySelectorAll("span[data-value]").forEach(s => s.className = "star-muted");
+    document.getElementById("rating-comment").value = "";
+    const el = document.getElementById("rating-feedback");
+    el.className = "alert alert-ok";
+    el.style.display = "block";
+    el.textContent = currentLang === "ar"
+      ? "تم حفظ التقييم."
+      : currentLang === "en"
+      ? "Review saved."
+      : "Avis enregistré.";
+    setTimeout(()=> el.style.display = "none", 2000);
+  });
+
+  document.getElementById("btn-report-abuse").addEventListener("click", () => {
+    const providerName = document.getElementById("rating-provider").value.trim();
+    const requesterName = document.getElementById("rating-requester").value.trim();
+    const comment = document.getElementById("rating-comment").value.trim();
+    abuses.push({
+      id: Date.now(),
+      providerName,
+      requesterName,
+      comment
+    });
+    saveArray(STORAGE_KEYS.abuses, abuses);
+    const el = document.getElementById("rating-feedback");
+    el.className = "alert alert-bad";
+    el.style.display = "block";
+    el.textContent = currentLang === "ar"
+      ? "تم تسجيل الإبلاغ عن إساءة (محلياً)."
+      : currentLang === "en"
+      ? "Abuse report stored locally (demo)."
+      : "Signalement d’abus enregistré localement (démo).";
+    setTimeout(()=> el.style.display = "none", 2500);
+  });
+
+  // -----------------------------
+  // Paiement (simulation) + convention
+  // -----------------------------
+  const btnPay = document.getElementById("btn-pay");
+  const payFeedback = document.getElementById("pay-feedback");
+
+  btnPay.addEventListener("click", () => {
+    const id = document.getElementById("pay-mission-id").value.trim();
+    const amount = parseFloat(document.getElementById("pay-amount").value || "0");
+    if (!id || !amount) return;
+    const mission = missions.find(m => String(m.id) === id);
+    const commission = amount * 0.05; // 5% commission [web:29]
+    const net = amount - commission;
+    payments.push({
+      id: Date.now(),
+      missionId: id,
+      amount,
+      commission,
+      net
+    });
+    saveArray(STORAGE_KEYS.payments, payments);
+    payFeedback.style.display = "block";
+    payFeedback.className = "alert alert-ok";
+    payFeedback.textContent =
+      (currentLang === "ar"
+        ? `تمت محاكاة الدفع: المبلغ ${amount}، عمولة المنصة 5% = ${commission.toFixed(2)}، الصافي ${net.toFixed(2)}.`
+        : currentLang === "en"
+        ? `Payment simulated: amount ${amount}, platform fee 5% = ${commission.toFixed(2)}, net to provider ${net.toFixed(2)}.`
+        : `Paiement simulé : montant ${amount}, commission plateforme 5% = ${commission.toFixed(2)}, net prestataire ${net.toFixed(2)}.`);
+    setTimeout(()=> payFeedback.style.display = "none", 3500);
+  });
+
+  document.getElementById("btn-generate-contract").addEventListener("click", () => {
+    const id = missions.length ? missions[missions.length - 1].id : "";
+    const mission = missions.find(m => String(m.id) === String(id)) || {};
+    const baseTextFr =
+`CONVENTION DE MISSION – MA DIR WALLO
+
+Entre :
+- Le Prestataire : ${mission.provider || "[Nom prestataire]"}
+- Le Demandeur : ${mission.requester || "[Nom demandeur]"}
+
+Objet : ${mission.title || "[Titre de la mission]"}
+Description : ${mission.desc || "[Description détaillée]"}
+
+Durée et lieu :
+- Durée / créneau : ${mission.duration || "[Durée]"}
+- Lieu : ${mission.location || "[Lieu]"}
+
+Modalités financières :
+- Budget / tarif : ${mission.budget || "[Montant]"} DZD (si service rémunéré)
+- Commission plateforme : 5 % du montant total (retenue lors du paiement en ligne).
+
+Confidentialité et responsabilité :
+- Les parties s’engagent à respecter la confidentialité des informations échangées.
+- Chaque partie demeure responsable de ses actes dans le cadre de la mission.
+
+Signature électronique :
+En validant la mission dans l’application « Ma Dir Wallo », les deux parties acceptent la présente convention.`;
+    const baseTextEn =
+`MISSION AGREEMENT – MA DIR WALLO
+
+Between:
+- Provider: ${mission.provider || "[Provider name]"}
+- Requester: ${mission.requester || "[Requester name]"}
+
+Subject: ${mission.title || "[Mission title]"}
+Description: ${mission.desc || "[Detailed description]"}
+
+Duration and place:
+- Time slot: ${mission.duration || "[Duration]"}
+- Location: ${mission.location || "[Location]"}
+
+Financial terms:
+- Budget / rate: ${mission.budget || "[Amount]"} DZD (if paid service)
+- Platform fee: 5% of the total amount (retained at online payment).
+
+Confidentiality and liability:
+- Both parties keep exchanged information confidential.
+- Each party remains liable for their actions during the mission.
+
+Electronic signature:
+By validating the mission in the “Ma Dir Wallo” app, both parties accept this agreement.`;
+    const baseTextAr =
+`اتفاقية مهمة – ما تدير والو
+
+بين:
+- مقدّم الخدمة: ${mission.provider || "[اسم مقدّم الخدمة]"}
+- طالب الخدمة: ${mission.requester || "[اسم طالب الخدمة]"}
+
+الموضوع: ${mission.title || "[عنوان المهمة]"}
+الوصف: ${mission.desc || "[وصف تفصيلي]"}
+
+المدة والمكان:
+- المدة / التوقيت: ${mission.duration || "[المدة]"}
+- المكان: ${mission.location || "[المكان]"}
+
+الشروط المالية:
+- الميزانية / الأجر: ${mission.budget || "[المبلغ]"} دج (في حال كانت الخدمة مدفوعة)
+- عمولة المنصة: 5% من المبلغ الإجمالي (تُقتطع عند الدفع الإلكتروني).
+
+السرية والمسؤولية:
+- يلتزم الطرفان بسرية المعلومات المتبادلة.
+- يتحمّل كل طرف مسؤولية أفعاله أثناء تنفيذ المهمة.
+
+التوقيع الإلكتروني:
+عند تأكيد المهمة في تطبيق «ما تدير والو»، فإن الطرفين يقبلان بهذه الاتفاقية.`;
+
+    document.getElementById("contract-text").value =
+      currentLang === "ar" ? baseTextAr : currentLang === "en" ? baseTextEn : baseTextFr;
+  });
+
+  // -----------------------------
+  // Initialisation
+  // -----------------------------
+  applyTranslations();
+  renderProviders();
+  renderMissions();
+  renderMessages();
+  recomputeProviderRatings();
+  renderRatings();
+</script>
+</body>
+</html>
+
